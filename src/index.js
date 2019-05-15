@@ -13,6 +13,7 @@ import {
 import SwipeIcon from './components/SwipeIcon';
 import images from './assets/images';
 
+const TOUCH_THRESHOLD = 20;
 const MARGIN_TOP = Platform.OS === 'ios' ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get('window').height - MARGIN_TOP;
 type Props = {
@@ -53,9 +54,9 @@ export default class SwipeUpDown extends Component<Props> {
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: (event, gestureState) => true,
       onPanResponderMove: this._onPanResponderMove.bind(this),
-      onPanResponderRelease: this._onPanResponderRelease.bind(this)
+      onPanResponderRelease: this._onPanResponderRelease.bind(this),
+      onMoveShouldSetPanResponder: this._onMoveShouldSetPanResponder.bind(this)
     });
   }
 
@@ -79,6 +80,13 @@ export default class SwipeUpDown extends Component<Props> {
         break;
     }
     this.viewRef.setNativeProps(this.customStyle);
+  }
+
+
+  _onMoveShouldSetPanResponder(event, gestureState) {
+    const {dx, dy} = gestureState;
+
+    return (Math.abs(dx) > TOUCH_THRESHOLD) || (Math.abs(dy) > TOUCH_THRESHOLD);
   }
 
   _onPanResponderMove(event, gestureState) {
