@@ -33,11 +33,13 @@ export default class SwipeUpDown extends Component<Props> {
   };
   constructor(props) {
     super(props);
+    console.log('SwipeUpDown props', props)
     this.state = {
       collapsed: true
     };
     this.disablePressToShow = props.disablePressToShow;
     this.SWIPE_HEIGHT = props.swipeHeight || 60;
+    console.log('constructor SWIPE_HEIGHT', this.SWIPE_HEIGHT)
     this._panResponder = null;
     this.top = this.SWIPE_HEIGHT;
     this.height = this.SWIPE_HEIGHT;
@@ -49,6 +51,8 @@ export default class SwipeUpDown extends Component<Props> {
       }
     };
     this.checkCollapsed = true;
+    this.swipeIconStyle = props.swipeIconStyle;
+    this.swipeIconDark = !!props.darkIcon;
     this.showFull = this.showFull.bind(this);
   }
 
@@ -95,20 +99,22 @@ export default class SwipeUpDown extends Component<Props> {
 
       this.customStyle.style.top = this.top + gestureState.dy;
       this.customStyle.style.height = DEVICE_HEIGHT - gestureState.dy;
-      this.swipeIconRef && this.swipeIconRef.setState({ icon: images.minus });
+      this.swipeIconRef && this.swipeIconRef.setState({ icon: this.swipeIconDark ? images.minus_dark : images.minus });
       !this.state.collapsed && this.setState({ collapsed: true });
       this.updateNativeProps();
-    } else if (this.checkCollapsed && gestureState.dy < -60) {
+    }
+    else if (this.checkCollapsed && gestureState.dy < -60) {
       // SWIPE UP
       this.top = 0;
       this.customStyle.style.top = DEVICE_HEIGHT + gestureState.dy;
       this.customStyle.style.height = -gestureState.dy + this.SWIPE_HEIGHT;
-      this.swipeIconRef &&
-        this.swipeIconRef.setState({ icon: images.minus, showIcon: true });
+console.log('_onPanResponderMove SWIPE_HEIGHT', this.SWIPE_HEIGHT)
+      this.swipeIconRef && this.swipeIconRef.setState({ icon: this.swipeIconDark ? images.minus_dark : images.minus, showIcon: true });
+
       if (this.customStyle.style.top <= DEVICE_HEIGHT / 2) {
         this.swipeIconRef &&
           this.swipeIconRef.setState({
-            icon: images.arrow_down,
+            icon: this.swipeIconDark ? images.arrow_down_dark : images.arrow_down,
             showIcon: true
           });
       }
@@ -130,7 +136,7 @@ export default class SwipeUpDown extends Component<Props> {
     this.customStyle.style.top = 0;
     this.customStyle.style.height = DEVICE_HEIGHT;
     this.swipeIconRef &&
-      this.swipeIconRef.setState({ icon: images.arrow_down, showIcon: true });
+      this.swipeIconRef.setState({ icon: this.swipeIconDark ? images.arrow_down_dark : images.arrow_down, showIcon: true });
     this.updateNativeProps();
     this.state.collapsed && this.setState({ collapsed: false });
     this.checkCollapsed = false;
@@ -139,7 +145,7 @@ export default class SwipeUpDown extends Component<Props> {
 
   showMini() {
     const { onShowMini, itemMini } = this.props;
-    this.SWIPE_HEIGHT = 150; //Avoid hiding when swiping down.
+    // this.SWIPE_HEIGHT = 150; //Avoid hiding when swiping down.
     this.customStyle.style.top = itemMini
       ? DEVICE_HEIGHT - this.SWIPE_HEIGHT
       : DEVICE_HEIGHT;
@@ -171,6 +177,8 @@ export default class SwipeUpDown extends Component<Props> {
         <SwipeIcon
           onClose={() => this.showMini()}
           hasRef={ref => (this.swipeIconRef = ref)}
+          style={this.swipeIconStyle}
+          darkIcon={this.swipeIconDark}
         />
         {collapsed ? (
           itemMini ? (

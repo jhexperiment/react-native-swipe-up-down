@@ -5,10 +5,17 @@ import images from '../../assets/images';
 export default class SwipeIcon extends Component {
   constructor(props) {
     super(props);
+    console.log('SwipeIcon props', props)
+    this.darkIcon = !!props.darkIcon;
+
+
     this.state = {
-      icon: images.minus,
+      icon: this.darkIcon ? images.minus_dark : images.minus,
       showIcon: false
     };
+
+
+    this.style = props.style || {};
   }
   componentDidMount() {
     this.props.hasRef && this.props.hasRef(this);
@@ -20,12 +27,25 @@ export default class SwipeIcon extends Component {
 
   render() {
     const { icon, showIcon } = this.state;
+    
     return (
-      <View style={{ alignItems: 'center', height: 10, marginBottom: 5 }}>
+      <View
+        style={[
+          {
+            alignItems: 'center',
+            height: 10,
+            marginBottom: 5
+          },
+          this.style
+        ]}
+      >
         {showIcon && (
           <Image
             source={icon}
-            style={{ width: 35, height: icon === images.minus ? 5 : 10 }}
+            style={{
+              width: 35,
+              height: ( (icon === images.minus) || (icon === images.minus_dark) ) ? 5 : 10
+            }}
           />
         )}
       </View>
