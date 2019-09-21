@@ -33,13 +33,13 @@ export default class SwipeUpDown extends Component<Props> {
   };
   constructor(props) {
     super(props);
-    console.log('SwipeUpDown props', props)
+    // console.log('SwipeUpDown props', props)
     this.state = {
       collapsed: true
     };
     this.disablePressToShow = props.disablePressToShow;
     this.SWIPE_HEIGHT = props.swipeHeight || 60;
-    console.log('constructor SWIPE_HEIGHT', this.SWIPE_HEIGHT)
+    // console.log('constructor SWIPE_HEIGHT', this.SWIPE_HEIGHT)
     this._panResponder = null;
     this.top = this.SWIPE_HEIGHT;
     this.height = this.SWIPE_HEIGHT;
@@ -108,7 +108,7 @@ export default class SwipeUpDown extends Component<Props> {
       this.top = 0;
       this.customStyle.style.top = DEVICE_HEIGHT + gestureState.dy;
       this.customStyle.style.height = -gestureState.dy + this.SWIPE_HEIGHT;
-console.log('_onPanResponderMove SWIPE_HEIGHT', this.SWIPE_HEIGHT)
+      // console.log('_onPanResponderMove SWIPE_HEIGHT', this.SWIPE_HEIGHT)
       this.swipeIconRef && this.swipeIconRef.setState({ icon: this.swipeIconDark ? images.minus_dark : images.minus, showIcon: true });
 
       if (this.customStyle.style.top <= DEVICE_HEIGHT / 2) {

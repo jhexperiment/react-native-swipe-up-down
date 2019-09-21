@@ -5,7 +5,7 @@ import images from '../../assets/images';
 export default class SwipeIcon extends Component {
   constructor(props) {
     super(props);
-    console.log('SwipeIcon props', props)
+    // console.log('SwipeIcon props', props)
     this.darkIcon = !!props.darkIcon;
 
 
@@ -27,7 +27,7 @@ export default class SwipeIcon extends Component {
 
   render() {
     const { icon, showIcon } = this.state;
-    
+
     return (
       <View
         style={[
